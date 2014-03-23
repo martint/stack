@@ -65,10 +65,10 @@ threads = STDIN.read.
         thread
 end.compact
 
-held_locks_by_thread = {}
+lock_owners = {}
 threads.each do |thread|
   thread[:held_locks].each do |lock|
-    held_locks_by_thread[lock] = thread[:id]
+    lock_owners[lock] = thread[:id]
   end
 end
 
@@ -93,7 +93,7 @@ threads.reverse.each do |thread|
   puts "\"#{thread[:id]}\" [label=\"#{thread[:name]}\", fillcolor=#{color}, tooltip=\"#{raw}\"];"
 
   thread[:waiting_locks].each do |lock|
-    puts "\"#{thread[:id]}\"->\"#{held_locks_by_thread[lock]}\";"
+    puts "\"#{thread[:id]}\"->\"#{lock_owners[lock]}\";"
   end
 end
 
